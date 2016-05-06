@@ -123,17 +123,8 @@ object EquationTree extends App {
 
   def applyParens2(pair: List[(Int, String)], termList: List[String]): List[String] = {
     val untouchedIndices = (1 to termList.length).toList diff List(pair.head._1) diff List(pair.last._1)
-    val changedMap = Map(pair.head._1 -> {
-      pair.head._2 match {
-        case "(" => s"(${termList(pair.head._1 - 1)}"
-        case ")" => s"${termList(pair.head._1 - 1)})"
-      }
-    }) ++ Map(pair.last._1 -> {
-      pair.last._2 match {
-        case "(" => s"(${termList(pair.last._1 - 1)}"
-        case ")" => s"${termList(pair.last._1 - 1)})"
-      }
-    })
+    val changedMap = Map(pair.head._1 -> paren(termList(pair.head._1 - 1), pair.head)) ++
+                     Map(pair.last._1 -> paren(termList(pair.last._1 - 1), pair.last))
     val unchangedMap =
       untouchedIndices.map { ndx =>
         ndx -> termList(ndx - 1)
